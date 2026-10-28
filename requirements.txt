@@ -1,0 +1,8 @@
+# Python API runtime for Web deployment (gesture inference runs in the browser).
+# Kept lean so cloud builds (e.g. Render) do not install heavy notebook/PyTorch packages.
+# For full local Jupyter/OpenCV/YOLOv8 dependencies, see pyproject.toml.
+fastapi>=0.115,<1.0
+uvicorn>=0.30,<1.0
+# Explicitly require Pydantic v2 (v1 is incompatible with Python 3.14).
+pydantic>=2.12,<3.0
+

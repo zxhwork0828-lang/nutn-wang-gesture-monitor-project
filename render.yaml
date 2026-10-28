@@ -1,0 +1,10 @@
+# Render Blueprint for deploying the gesture_detection web service from the repository root.
+services:
+  - type: web
+    name: gesture-detection
+    runtime: python
+    rootDir: gesture_detection
+    buildCommand: python -m pip install -r requirements.txt
+    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+

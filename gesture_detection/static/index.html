@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a18">
+  <title>手勢映廊 · Gesture Gallery</title>
+  <link rel="stylesheet" href="/static/styles.css?v=compact-guide-1">
+  <link rel="stylesheet" href="/static/spacious.css?v=1">
+  <script type="module" src="/static/app.js?v=compact-guide-1"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="手勢映廊首頁"><span class="brand-icon">✳</span> 手勢映廊 <span class="brand-en">GESTURE GALLERY</span></a>
+    <span class="privacy"><span class="dot"></span> 影像只在你的裝置處理</span>
+  </header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">A LITTLE MOVEMENT. A NEW PERSPECTIVE.</p><h1>揮揮手，換個風景。</h1><p class="subtitle">讓手勢帶你瀏覽圖片，也能隨時用按鈕輕鬆切換。</p></div>
+      <label class="import-button" for="image-files">＋ 選取我的圖片<input id="image-files" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple></label>
+    </section>
+    <div class="workspace">
+      <section class="panel camera-panel" aria-labelledby="camera-title">
+        <div class="panel-heading"><h2 id="camera-title"><span class="section-number">01</span> 手勢控制</h2><span id="camera-badge" class="badge">攝影機未啟動</span></div>
+        <div class="camera-monitor">
+        <div class="camera-feed">
+        <div class="camera-stage">
+          <video id="camera" autoplay playsinline muted aria-label="鏡像攝影機預覽"></video>
+          <canvas id="landmarks" aria-hidden="true"></canvas>
+          <div id="camera-placeholder" class="camera-placeholder"><span class="hand-symbol">✋</span><strong>準備好你的手勢</strong><p>啟動攝影機，讓手掌完整出現在畫面中</p><span class="camera-corners" aria-hidden="true"></span></div>
+          <span class="mirror-label">鏡像預覽 · 依畫面左右移動</span>
+        </div>
+        <details class="camera-settings"><summary>攝影機來源設定（外接優先）</summary>
+        <div class="camera-device-row"><label for="camera-device">來源</label><select id="camera-device"><option value="">自動選擇（外接優先）</option></select><button id="refresh-cameras" class="button secondary" title="重新偵測攝影機">重新偵測</button></div>
+        </details>
+        <p id="active-camera" class="device-name">授權後會顯示實際使用的攝影機名稱。</p>
+        <div class="camera-toolbar"><button id="start-camera" class="button primary">啟動攝影機</button><button id="stop-camera" class="button secondary" disabled>停止</button></div>
+        <p id="camera-status" class="status" role="status" aria-live="polite">預設外接優先；也可指定裝置，系統會記住你的選擇。</p>
+        <div class="gesture-result"><span class="live-indicator"></span><span id="gesture-label">等待手勢</span><span class="gesture-tip">保持約半秒</span></div>
+        </div>
+        <aside class="camera-guide" aria-labelledby="guide-title" data-mode="browse">
+          <h3 id="guide-title">手勢說明</h3>
+          <label class="effects-switch"><input id="effects-enabled" type="checkbox"> 特效手勢模式</label>
+          <p class="guide-mode-note">切換模式，查看對應手勢說明。</p>
+          <section class="guide-group browse-guide" aria-labelledby="browse-guide-title">
+            <h4 id="browse-guide-title">一般瀏覽 <span>預設</span></h4>
+            <dl><div><dt>手掌向左移</dt><dd>← 上一張</dd></div><div><dt>手掌向右移</dt><dd>→ 下一張</dd></div><div><dt>只伸食指</dt><dd>第一張</dd></div><div><dt>只伸小指</dt><dd>最後一張</dd></div></dl>
+            <p>伸指保持半秒，切換後冷卻 1 秒。</p>
+          </section>
+          <section class="guide-group effects-guide" aria-labelledby="effects-guide-title">
+            <h4 id="effects-guide-title">圖片特效 <span>需開啟</span></h4>
+            <dl><div><dt>手心／手背翻面</dt><dd>左右翻轉</dd></div><div><dt>手掌傾斜</dt><dd>旋轉</dd></div><div><dt>拇指／食指間距</dt><dd>靠近縮小、分開放大</dd></div><div><dt>手掌上下移動</dt><dd>下移透明、上移不透明</dd></div></dl>
+            <p>張開四指操作；握拳暫停。特效模式以按鈕／鍵盤切圖。</p>
+          </section>
+        </aside>
+        </div>
+      </section>
+      <section class="panel gallery-panel" aria-labelledby="gallery-title">
+        <div class="panel-heading"><h2 id="gallery-title"><span class="section-number">02</span> 圖片展示</h2><span id="image-count" class="badge">載入中</span></div>
+        <div class="image-stage"><img id="slide-image" alt="" hidden><div id="image-empty" class="image-empty">正在載入圖片…</div><span id="image-position" class="image-position">—</span></div>
+        <div class="image-caption"><div><p class="eyebrow">IN THE FRAME</p><h3 id="image-name">選擇一張圖片</h3></div><span id="action-feedback" role="status" aria-live="polite">用手勢探索圖片</span></div>
+        <div class="playback-controls" aria-label="圖片控制">
+          <button class="button secondary" data-action="first" title="第一張（Home）">⇤ <span>第一張</span></button>
+          <button class="button secondary" data-action="previous" title="上一張（←）">← <span>上一張</span></button>
+          <button class="button primary" data-action="next" title="下一張（→）"><span>下一張</span> →</button>
+          <button class="button secondary" data-action="last" title="最後一張（End）"><span>最後一張</span> ⇥</button>
+        </div>
+        <div id="thumbnails" class="thumbnails" aria-label="圖片縮圖"></div>
+        <p class="keyboard-hint">也可以使用鍵盤 <kbd>←</kbd> <kbd>→</kbd> 切換，<kbd>Home</kbd> / <kbd>End</kbd> 跳至首尾。</p>
+        <section class="image-effects" aria-labelledby="effects-title">
+          <div class="effects-heading"><h3 id="effects-title">圖片特效調整</h3></div>
+          <p class="effects-help">手勢模式開關與完整操作說明位於攝影機旁；下方按鈕與滑桿隨時可用。</p>
+          <p id="effects-status" class="effects-status" role="status">一般瀏覽模式：原切圖手勢照常。也可直接使用下方控制。</p>
+          <div class="effect-buttons"><button id="mirror-image" class="button secondary" aria-pressed="false">左右翻轉</button><button id="calibrate-effects" class="button secondary" disabled>重新校正手勢</button><button id="reset-effects" class="button secondary">重設特效</button></div>
+          <div class="effect-sliders">
+            <label for="image-rotation"><span>旋轉 <output id="rotation-value" for="image-rotation">0°</output></span><input id="image-rotation" type="range" min="-180" max="180" value="0" step="1"></label>
+            <label for="image-scale"><span>縮放 <output id="scale-value" for="image-scale">100%</output></span><input id="image-scale" type="range" min="50" max="250" value="100" step="1"></label>
+            <label for="image-opacity"><span>不透明度 <output id="opacity-value" for="image-opacity">100%</output></span><input id="image-opacity" type="range" min="15" max="100" value="100" step="1"></label>
+          </div>
+        </section>
+      </section>
+    </div>
+    <footer><span>手勢映廊 <span class="footer-divider">/</span> 不觸碰，也能探索。</span><span>張開手掌左右移動 · 伸指後收回，再做下一個手勢</span></footer>
+  </main>
+</body>
+</html>

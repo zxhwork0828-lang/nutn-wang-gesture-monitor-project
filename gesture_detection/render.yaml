@@ -1,0 +1,10 @@
+# If deploying the existing parent repository, set Root Directory to
+# gesture_detection in the Render dashboard instead (see README.md).
+# This Blueprint assumes gesture_detection becomes the repository root.
+services:
+  - type: web
+    name: gesture-detection
+    runtime: python
+    buildCommand: python -m pip install -r requirements.txt
+    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health

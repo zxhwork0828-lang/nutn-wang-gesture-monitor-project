@@ -1,0 +1,70 @@
+/* Give camera viewing and gesture instructions the larger share of the page. */
+main { max-width: 1920px; padding-left: 3vw; padding-right: 3vw; }
+.workspace { grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); gap: 22px; }
+.camera-panel { padding: 20px; }
+.camera-monitor { grid-template-columns: minmax(0, 1.5fr) minmax(240px, 1fr); gap: 20px; }
+.camera-feed .camera-stage { height: clamp(230px, 36dvh, 380px); }
+.camera-guide { padding-left: 20px; }
+.camera-guide h3 { font-size: 17px; margin-bottom: 12px; }
+.camera-guide .effects-switch { font-size: 14px; }
+.guide-group { padding: 12px; margin-top: 12px; }
+.guide-group h4 { font-size: 14px; margin-bottom: 10px; }
+.guide-group h4 span { font-size: 11px; }
+.guide-group dl { gap: 10px; }
+.guide-group dt, .guide-group dd { font-size: 13px; line-height: 1.65; }
+.guide-group p { font-size: 12px; line-height: 1.7; margin-top: 10px; }
+.camera-feed .camera-toolbar .button { font-size: 14px; padding: 12px; }
+.camera-feed .device-name, .camera-feed .status,
+.camera-feed #gesture-label, .camera-settings summary { font-size: 12px; }
+.camera-placeholder strong { font-size: 16px; }
+.camera-placeholder .hand-symbol { font-size: 40px; }
+.camera-placeholder p { font-size: 12px; }
+
+/* A single mode's larger instructions fit alongside the larger camera. */
+@media (max-height: 850px) {
+  .camera-guide[data-mode=browse] .effects-guide,
+  .camera-guide[data-mode=effects] .browse-guide { display: none; }
+  .guide-mode-note { display: block; color: var(--muted); font-size: 12px; line-height: 1.7; margin: 8px 0; }
+}
+@media (max-width: 1100px) {
+  .workspace { grid-template-columns: minmax(0, 1fr); }
+  .camera-monitor { grid-template-columns: minmax(0, 1.5fr) minmax(240px, 1fr); }
+  .camera-panel { padding: 18px; }
+  .camera-feed .camera-stage { height: clamp(200px, 33dvh, 330px); }
+}
+@media (max-width: 600px) {
+  main { padding-left: 12px; padding-right: 12px; }
+  .camera-panel { padding: 12px; }
+  .camera-monitor { grid-template-columns: minmax(0, 1.1fr) minmax(140px, 1fr); gap: 10px; }
+  .camera-guide { padding-left: 10px; }
+  .camera-guide h3 { font-size: 15px; margin-bottom: 10px; }
+  .camera-guide .effects-switch { font-size: 12px; }
+  .camera-guide[data-mode=browse] .effects-guide,
+  .camera-guide[data-mode=effects] .browse-guide { display: none; }
+  .guide-mode-note { display: block; font-size: 11px; line-height: 1.6; margin: 6px 0; }
+  .guide-group { padding: 8px; }
+  .guide-group h4 { font-size: 13px; }
+  .guide-group h4 span { font-size: 10px; }
+  .guide-group dt, .guide-group dd { font-size: 12px; line-height: 1.6; }
+  .guide-group p { font-size: 11px; }
+  .guide-group dl { gap: 8px; }
+  .camera-feed .camera-stage { height: clamp(150px, 27dvh, 240px); }
+  .camera-feed .camera-toolbar .button { font-size: 12px; padding: 10px 6px; }
+  .camera-feed .status, .camera-feed #gesture-label, .camera-settings summary { font-size: 11px; }
+  .camera-placeholder strong { font-size: 12px; }
+  .camera-placeholder .hand-symbol { font-size: 30px; }
+}
+@media (max-width: 360px) {
+  .camera-monitor { grid-template-columns: minmax(0, 1fr) minmax(135px, 1fr); gap: 8px; }
+  .camera-guide { padding-left: 8px; }
+}
+@media (max-height: 500px) and (min-width: 601px) {
+  .camera-panel { padding: 12px; }
+  .camera-feed .camera-stage { height: 125px; min-height: 125px; }
+  .camera-feed .camera-toolbar .button { padding: 9px; font-size: 12px; }
+  .guide-group { padding: 9px; margin-top: 8px; }
+  .guide-group dl { gap: 5px; }
+  .guide-group dt, .guide-group dd { font-size: 12px; }
+  .guide-group p { margin-top: 6px; font-size: 11px; }
+  .camera-guide h3 { margin-bottom: 8px; font-size: 15px; }
+}
