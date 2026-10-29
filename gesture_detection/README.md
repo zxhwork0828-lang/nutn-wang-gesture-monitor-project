@@ -169,3 +169,21 @@ node --test gesture_detection/tests/gestures.test.mjs gesture_detection/tests/ca
 - 瀏覽器驗證涵蓋 1366×768、1280×720、390×844、375×667、320×568、844×390，兩種模式均確認攝影機與說明在捲動至操作區後可完整同時顯示，且無水平溢出。
 
 版面放大調整：桌面左側攝影機與說明區改為約 64% 寬度，攝影機預覽加高、說明文字加大。較矮的視窗只顯示目前模式說明，以維持攝影機與說明同時可見。新增 spacious.css 管理此版面調整，原功能不變。已通過六種桌面／手機尺寸的瀏覽器版面與控制操作檢查。
+
+## 修復正式站模型資源缺漏（2026-10-29）
+
+正式站的模型與 WASM URL 曾回傳 404；這會在攝影機授權成功後造成辨識初始化失敗，不能據此判定是手機 GPU 不支援。三個本機 WASM 二進位檔原本未納入 Git，現已加入暫存。
+
+本次新增：
+- check_assets.py：部署前檢查模型、JS 與三組 WASM；缺檔、錯誤檔頭或 LFS 指標會使檢查失敗。
+- /api/model-status：回報辨識資源是否完整。
+- 瀏覽器初始化前先檢查資源，缺少檔案時顯示具體檔名；其他初始化錯誤保留實際錯誤訊息。
+
+請提交並推送本次全部修正（含 WASM）後，再部署最新 Git commit。Render Dashboard 的 Build Command 請同步改為：
+
+```bash
+python -m pip install -r requirements.txt && python check_assets.py
+```
+
+Start Command 維持不變。新版本的 /api/model-status 應回傳 ready: true；不要只以 /health 正常作為模型已部署的依據。
+本機已通過部署資源檢查、兩項資源驗證測試，以及實際 MediaPipe 模型載入／模擬攝影機測試；實體手機與正式站仍需更新部署後驗證。

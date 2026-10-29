@@ -6,6 +6,11 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+if __package__:
+    from .assets import asset_status
+else:
+    from assets import asset_status
+
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 IMAGE_DIR = STATIC_DIR / "images"
@@ -30,6 +35,11 @@ def images() -> list[dict[str, str]]:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/api/model-status")
+def model_status() -> dict:
+    return asset_status(STATIC_DIR)
 
 
 if __name__ == "__main__":

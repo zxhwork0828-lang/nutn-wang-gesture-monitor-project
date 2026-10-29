@@ -178,6 +178,19 @@ async function loadModel() {
   if (handModel) return handModel;
   if (!modelPromise) {
     modelPromise = (async () => {
+      const response = await fetch('/api/model-status', { cache: 'no-store' });
+      if (!response.ok) {
+        const error = new Error('網站辨識資源檢查失敗，請確認已部署最新版本後重試。');
+        error.name = 'ModelAssetError';
+        throw error;
+      }
+      const assets = await response.json();
+      if (!assets.ready) {
+        const names = [...(assets.missing || []), ...(assets.invalid || [])].map(path => path.split('/').at(-1));
+        const error = new Error(`辨識資源尚未完整部署，請更新網站後重試。缺少或損壞：${names.join('、')}`);
+        error.name = 'ModelAssetError';
+        throw error;
+      }
       const { HandLandmarker, FilesetResolver } = await import(`${VISION_ROOT}/vision_bundle.mjs`);
       const files = await FilesetResolver.forVisionTasks(`${VISION_ROOT}/wasm`);
       const options = {
@@ -321,7 +334,7 @@ async function startCamera() {
       NotReadableError: '無法讀取攝影機，請確認是否被其他程式占用。',
       OverconstrainedError: '指定的攝影機無法開啟，請重新偵測並選擇裝置。',
     };
-    const message = messages[error.name] || (stream ? '模型載入失敗，請重新整理後重試，並確認模型與執行資源完整；圖片按鈕仍可使用。' : error.message);
+    const message = error.name === 'ModelAssetError' ? error.message : messages[error.name] || (stream ? `模型初始化失敗：${error.message || '未知錯誤'}。圖片按鈕仍可使用。` : error.message);
     stopCamera(message);
   }
 }
